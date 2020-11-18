@@ -1,8 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const formidable = require("express-formidable");
 const axios = require("axios");
 const md5 = require("md5");
-require("dotenv").config();
 const cors = require("cors");
 
 const app = express();
@@ -23,14 +23,14 @@ app.get("/test", (req, res) => {
 app.get("/comics", async (req, res) => {
   try {
     const date = new Date();
-    const timestamp = Math.floor(date.getTime() / 1000);
+    const timestamp = date.getTime();
     const hash = md5(timestamp + private_API_key + public_API_key);
 
     const response = await axios.get(
       `https://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}`
     );
 
-    res.json(response);
+    res.json(response.data);
   } catch (error) {
     console.log(error.message);
   }
@@ -46,7 +46,7 @@ app.get("/characters", async (req, res) => {
       `https://gateway.marvel.com/v1/public/characters?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}`
     );
 
-    res.json(response);
+    res.json(response.data);
   } catch (error) {
     console.log(error.message);
   }
