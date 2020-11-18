@@ -22,12 +22,16 @@ app.get("/test", (req, res) => {
 
 app.get("/comics", async (req, res) => {
   try {
+    const { offset } = req.query;
+    if (!offset) {
+      offset = 0;
+    }
     const date = new Date();
     const timestamp = date.getTime();
     const hash = md5(timestamp + private_API_key + public_API_key);
 
     const response = await axios.get(
-      `https://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}`
+      `https://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=32&offset=${offset}`
     );
 
     res.json(response.data);
@@ -38,12 +42,16 @@ app.get("/comics", async (req, res) => {
 
 app.get("/characters", async (req, res) => {
   try {
+    const { offset } = req.query;
+    if (!offset) {
+      offset = 0;
+    }
     const date = new Date();
     const timestamp = date.getTime();
     const hash = md5(timestamp + private_API_key + public_API_key);
 
     const response = await axios.get(
-      `https://gateway.marvel.com/v1/public/characters?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}`
+      `https://gateway.marvel.com/v1/public/characters?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=32&offset=${offset}`
     );
 
     res.json(response.data);
