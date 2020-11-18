@@ -3,9 +3,11 @@ const formidable = require("express-formidable");
 const axios = require("axios");
 const md5 = require("md5");
 require("dotenv").config();
+const cors = require("cors");
 
 const app = express();
 app.use(formidable());
+app.use(cors());
 
 const public_API_key = process.env.PUBLIC_API_KEY;
 const private_API_key = process.env.PRIVATE_API_KEY;
