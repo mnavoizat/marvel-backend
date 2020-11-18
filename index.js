@@ -22,7 +22,7 @@ app.get("/test", (req, res) => {
 
 app.get("/comics", async (req, res) => {
   try {
-    const { offset } = req.query;
+    let { offset } = req.query;
     if (!offset) {
       offset = 0;
     }
@@ -42,7 +42,7 @@ app.get("/comics", async (req, res) => {
 
 app.get("/characters", async (req, res) => {
   try {
-    const { offset } = req.query;
+    let { offset } = req.query;
     if (!offset) {
       offset = 0;
     }
