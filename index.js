@@ -23,7 +23,7 @@ app.get("/test", (req, res) => {
 app.get("/comics", async (req, res) => {
   try {
     const date = new Date();
-    const timestamp = date.getTime();
+    const timestamp = Math.floor(date.getTime() / 1000);
     const hash = md5(timestamp + private_API_key + public_API_key);
 
     const response = await axios.get(
