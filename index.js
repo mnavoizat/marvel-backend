@@ -69,7 +69,7 @@ app.get("/character", async (req, res) => {
     const hash = md5(timestamp + private_API_key + public_API_key);
 
     const response = await axios.get(
-      `https://gateway.marvel.com/v1/public/characters/${id}/stories?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}`
+      `https://gateway.marvel.com/v1/public/characters/${id}?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}`
     );
 
     res.json(response.data);
