@@ -22,19 +22,42 @@ app.get("/test", (req, res) => {
 
 app.get("/comics", async (req, res) => {
   try {
-    let { offset } = req.query;
-    if (!offset) {
-      offset = 0;
-    }
+    let { offset, search } = req.query;
+
     const date = new Date();
     const timestamp = date.getTime();
     const hash = md5(timestamp + private_API_key + public_API_key);
 
-    const response = await axios.get(
-      `https://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${offset}`
-    );
+    if (!offset) {
+      offset = 0;
+    }
 
-    res.json(response.data);
+    if (!search) {
+      const response = await axios.get(
+        `https://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${offset}`
+      );
+      res.json(response.data);
+    } else {
+      const regex = new RegExp(search, "ig");
+      const searchResults = [];
+      for (let i = 0; i < 2; i++) {
+        const response = await axios.get(
+          `https://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${
+            i * 100
+          }`
+        );
+        const res = response.data.data.results;
+
+        for (let j = 0; j < res.length; j++) {
+          if (res[j].title.match(regex)) {
+            searchResults.push(res[j]);
+          }
+        }
+      }
+      res.json({
+        data: { results: searchResults, total: searchResults.length },
+      });
+    }
   } catch (error) {
     console.log(error.message);
   }
@@ -42,16 +65,56 @@ app.get("/comics", async (req, res) => {
 
 app.get("/characters", async (req, res) => {
   try {
-    let { offset } = req.query;
+    let { offset, search } = req.query;
+
+    const date = new Date();
+    const timestamp = date.getTime();
+    const hash = md5(timestamp + private_API_key + public_API_key);
+
     if (!offset) {
       offset = 0;
     }
+    if (!search) {
+      const response = await axios.get(
+        `https://gateway.marvel.com/v1/public/characters?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${offset}`
+      );
+      res.json(response.data);
+    } else {
+      const regex = new RegExp(search, "ig");
+      const searchResults = [];
+      for (let i = 0; i < 14; i++) {
+        const response = await axios.get(
+          `https://gateway.marvel.com/v1/public/characters?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${
+            i * 100
+          }`
+        );
+        const res = response.data.data.results;
+
+        for (let j = 0; j < res.length; j++) {
+          if (res[j].name.match(regex)) {
+            searchResults.push(res[j]);
+          }
+        }
+      }
+      res.json({
+        data: { results: searchResults, total: searchResults.length },
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+app.get("/character/comics", async (req, res) => {
+  try {
+    let { id } = req.query;
+
     const date = new Date();
     const timestamp = date.getTime();
     const hash = md5(timestamp + private_API_key + public_API_key);
 
     const response = await axios.get(
-      `https://gateway.marvel.com/v1/public/characters?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${offset}`
+      `https://gateway.marvel.com/v1/public/characters/${id}/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}`
     );
 
     res.json(response.data);
@@ -69,7 +132,7 @@ app.get("/character", async (req, res) => {
     const hash = md5(timestamp + private_API_key + public_API_key);
 
     const response = await axios.get(
-      `https://gateway.marvel.com/v1/public/characters/${id}/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}`
+      `https://gateway.marvel.com/v1/public/characters/${id}?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}`
     );
 
     res.json(response.data);
