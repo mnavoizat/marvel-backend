@@ -82,7 +82,7 @@ app.get("/characters", async (req, res) => {
     } else {
       const regex = new RegExp(search, "ig");
       const searchResults = [];
-      for (let i = 0; i < 14; i++) {
+      for (let i = 0; i < 2; i++) {
         const response = await axios.get(
           `https://gateway.marvel.com/v1/public/characters?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${
             i * 100
