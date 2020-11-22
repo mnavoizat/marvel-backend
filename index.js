@@ -141,6 +141,24 @@ app.get("/character", async (req, res) => {
   }
 });
 
+app.get("/comic", async (req, res) => {
+  try {
+    let { id } = req.query;
+
+    const date = new Date();
+    const timestamp = date.getTime();
+    const hash = md5(timestamp + private_API_key + public_API_key);
+
+    const response = await axios.get(
+      `https://gateway.marvel.com/v1/public/comics/${id}?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}`
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 app.listen(process.env.PORT, () => {
   console.log("Server started");
 });
