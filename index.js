@@ -31,33 +31,14 @@ app.get("/comics", async (req, res) => {
     if (!offset) {
       offset = 0;
     }
-
     if (!search) {
-      const response = await axios.get(
-        `https://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${offset}&orderBy=name`
-      );
-      res.json(response.data);
-    } else {
-      const regex = new RegExp(search, "ig");
-      const searchResults = [];
-      for (let i = 0; i < 2; i++) {
-        const response = await axios.get(
-          `https://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${
-            i * 100
-          }`
-        );
-        const res = response.data.data.results;
-
-        for (let j = 0; j < res.length; j++) {
-          if (res[j].title.match(regex)) {
-            searchResults.push(res[j]);
-          }
-        }
-      }
-      res.json({
-        data: { results: searchResults, total: searchResults.length },
-      });
+      search = "";
     }
+
+    const response = await axios.get(
+      `https://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${offset}&orderBy=title&titleStartsWith=${search}`
+    );
+    res.json(response.data);
   } catch (error) {
     console.log(error.message);
   }
