@@ -34,7 +34,7 @@ app.get("/comics", async (req, res) => {
 
     if (!search) {
       const response = await axios.get(
-        `https://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${offset}`
+        `https://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${offset}&orderBy=name`
       );
       res.json(response.data);
     } else {
@@ -76,7 +76,7 @@ app.get("/characters", async (req, res) => {
     }
     if (!search) {
       const response = await axios.get(
-        `https://gateway.marvel.com/v1/public/characters?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${offset}`
+        `https://gateway.marvel.com/v1/public/characters?ts=${timestamp}&apikey=${public_API_key}&hash=${hash}&limit=100&offset=${offset}&orderBy=name`
       );
       res.json(response.data);
     } else {
